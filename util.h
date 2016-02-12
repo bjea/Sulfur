@@ -44,6 +44,8 @@ class sys_info {
 //
 
 const string datestring ();
+   //string date =
+
 
 //
 // split -
