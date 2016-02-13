@@ -77,3 +77,34 @@ void syscall_error (const string& object) {
    complain() << object << ": " << strerror (errno) << endl;
 }
 
+void readFile (istream& infile, const string& filename, string lineArray[], int& lineCount) {
+   lineCount = 1;
+   for (; ;) {
+      string space = " \t";
+      string line;
+      getline(infile, line);
+      if (infile.eof()) break;
+      cout << filename << ": " << lineCount << ": " << line << endl;
+      string lineTrimmed;
+      trim (line, space, lineTrimmed);
+      //cout << lineTrimmed << endl;
+      lineArray[lineCount-1] = lineTrimmed;
+      //cout << lineArray[lineCount-1] << endl;
+      ++lineCount;
+   }
+
+   //data.assign((istreambuf_iterator<char> (infile)), (istreambuf_iterator<char> ()));
+   //return lineArray;
+}
+
+void trim (string& line, string space, string& lineTrimmed) {
+   unsigned long lineBegin = line.find_first_not_of(space);
+   if (lineBegin == string::npos) {
+      lineTrimmed = "";
+      return;
+   }
+   unsigned long lineEnd = line.find_last_not_of(space);
+   lineTrimmed = line.substr(lineBegin, lineEnd - lineBegin + 1);
+   //return lineTrimmed;
+}
+

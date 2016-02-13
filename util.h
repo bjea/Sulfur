@@ -9,6 +9,7 @@
 #ifndef __UTIL_H__
 #define __UTIL_H__
 
+#include <fstream>
 #include <iostream>
 #include <list>
 #include <stdexcept>
@@ -44,7 +45,7 @@ class sys_info {
 //
 
 const string datestring ();
-   //string date =
+
 
 
 //
@@ -106,6 +107,9 @@ item_t from_string (const string&);
 //
 // Put the RCS Id string in the object file.
 //
+
+void readFile (istream& infile, const string& filename, string lineArray[], int& lineCount);
+void trim (string& line, string space, string& lineTrimmed);
 
 #include "util.tcc"
 #endif

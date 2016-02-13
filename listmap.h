@@ -34,7 +34,7 @@ class listmap {
       listmap& operator= (const listmap&);
       ~listmap();   // Look at the example in xlist.h: ~xlist(){ if (not empty()) pop_back();}
       iterator insert (const value_type&);
-      iterator find (const key_type&) const;
+      iterator find (const key_type&) /*const*/;
       iterator erase (iterator position);
       iterator begin() { return anchor()->next; }
       iterator end() { return anchor(); }

@@ -71,15 +71,17 @@ listmap<Key,Value,Less>::insert (const value_type& pair) {
 //
 template <typename Key, typename Value, class Less>
 typename listmap<Key,Value,Less>::iterator
-listmap<Key,Value,Less>::find (const key_type& that) const {
+listmap<Key,Value,Less>::find (const key_type& that) /*const*/ {
    TRACE ('l', that);
    node* current = anchor();
    while (current != nullptr && current->value.first != that) {
       current = current->prev;
    }
 
-   if (current == nullptr)
-      current = end();
+   if (current == nullptr) {
+      current = anchor();
+   }
+
 
    return iterator(current);
 }
