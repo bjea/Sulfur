@@ -74,16 +74,22 @@ typename listmap<Key,Value,Less>::iterator
 listmap<Key,Value,Less>::find (const key_type& that) /*const*/ {
    TRACE ('l', that);
    node* current = anchor();
-   while (current != nullptr && current->value.first != that) {
-      current = current->prev;
+
+   if(current->prev != current->next)
+   {
+      do {
+
+         if(current->value.first == that)
+         {
+            break;
+         }
+
+         current = current->next;
+
+      } while(current->next != anchor()->next);
    }
 
-   if (current == nullptr) {
-      current = anchor();
-   }
-
-
-   return iterator(current);
+   return listmap<Key,Value,Less>::iterator(current);
 }
 
 //

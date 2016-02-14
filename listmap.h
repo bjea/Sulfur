@@ -34,7 +34,7 @@ class listmap {
       listmap& operator= (const listmap&);
       ~listmap();   // Look at the example in xlist.h: ~xlist(){ if (not empty()) pop_back();}
       iterator insert (const value_type&);
-      iterator find (const key_type&) /*const*/;
+      listmap<Key,Value,Less>::iterator find (const key_type&) /*const*/;
       iterator erase (iterator position);
       iterator begin() { return anchor()->next; }
       iterator end() { return anchor(); }
@@ -47,10 +47,11 @@ class listmap<Key,Value,Less>::iterator {
    private:
       friend class listmap<Key,Value>;
       listmap<Key,Value,Less>::node* where {nullptr};
-      iterator (node* where): where(where){};
+      iterator (listmap<Key,Value,Less>::node* where): where(where){};
       //iterator (listmap)
    public:
       iterator(){}
+      //iterator (listmap<Key,Value,Less>::node* that) {where = that;}
       value_type& operator*();
       value_type* operator->(); // Unary operator, p->f, actually is p(->f), binding to f, i.operator->()
       iterator& operator++(); //++itor

@@ -63,20 +63,43 @@ int main (int argc, char** argv) {
          }
          else {
             readFile(inFile, it, lineArray, lineCount);
-            inFile.close();
+
             for (int i = 0; i < lineCount; ++i) {
                string currentLine = lineArray[i];
                str_str_map myMap;
                if (currentLine[0] == '#' or currentLine.length() == 0) {
                   continue;
                }
-               if (currentLine.find('=') == string::npos) {
+
+               auto foundEqual = currentLine.find('=');
+
+               if (foundEqual == string::npos) {
                   str_str_map::iterator itor = myMap.find(currentLine);
-                  str_str_pair pair = *itor;
-                  cout << pair.first << " = " << pair.second << endl;
+                  if (itor != myMap.end()) {
+                     str_str_pair pair = *itor;
+                     cout << pair.first << " = " << pair.second << endl;
+                  }
+                  else {
+                     cout << currentLine << ": key not found" << endl;
+                  }
+               }
+               else {
+                  if (currentLine.substr(foundEqual+1).find_first_not_of(" \t") == string::npos) {
+                     string keyName = currentLine.substr(0, foundEqual);
+                     str_str_map::iterator itor = myMap.find(keyName);
+                     myMap.erase(itor);
+                  }
+                  if (foundEqual == 0 && currentLine.length() == 1) {
+                     for (str_str_map::iterator itor = myMap.begin(); itor != myMap.end(); ++itor) {
+                        str_str_pair pair = *itor;
+                        cout << pair.first << " = " << pair.second << endl;
+                     }
+                  }
                }
 
+
             }
+            inFile.close();
          }
       }
    }
@@ -85,7 +108,7 @@ int main (int argc, char** argv) {
    }
 
 
-
+/*
    str_str_map test;
    for (char** argp = &argv[optind]; argp != &argv[argc]; ++argp) {
       str_str_pair pair (*argp, to_string<int> (argp - argv));
@@ -100,8 +123,11 @@ int main (int argc, char** argv) {
 
    str_str_map::iterator itor = test.begin();
    test.erase (itor);
-
+*/
    cout << "EXIT_SUCCESS" << endl;
    return EXIT_SUCCESS;
+
+
+
 }
 
