@@ -51,6 +51,7 @@ int main (int argc, char** argv) {
       filenames[i-1] = argv[i];
    }
    int lineCount = 0;
+   str_str_map myMap;
    for (const auto& it : filenames) {
 
       if (it == cin_name) {
@@ -66,7 +67,7 @@ int main (int argc, char** argv) {
 
             for (int i = 0; i < lineCount; ++i) {
                string currentLine = lineArray[i];
-               str_str_map myMap;
+
                if (currentLine[0] == '#' or currentLine.length() == 0) {
                   continue;
                }
@@ -74,7 +75,7 @@ int main (int argc, char** argv) {
                auto foundEqual = currentLine.find('=');
 
                if (foundEqual == string::npos) {
-                  str_str_map::iterator itor = myMap.find(currentLine);
+                  str_str_map::iterator itor = myMap.findKey(currentLine);
                   if (itor != myMap.end()) {
                      str_str_pair pair = *itor;
                      cout << pair.first << " = " << pair.second << endl;
@@ -86,7 +87,8 @@ int main (int argc, char** argv) {
                else {
                   if (currentLine.substr(foundEqual+1).find_first_not_of(" \t") == string::npos) {
                      string keyName = currentLine.substr(0, foundEqual);
-                     str_str_map::iterator itor = myMap.find(keyName);
+                     //keyName = keyName.substr(0, (keyName.find_last_not_of(" \t")+1));
+                     str_str_map::iterator itor = myMap.findKey(keyName);
                      myMap.erase(itor);
                   }
                   if (foundEqual == 0 && currentLine.length() == 1) {
@@ -95,6 +97,30 @@ int main (int argc, char** argv) {
                         cout << pair.first << " = " << pair.second << endl;
                      }
                   }
+                  if (foundEqual == 0 && currentLine.length() > 1) {
+                     //auto valueNamePos = currentLine.substr(foundEqual+1).find_first_not_of(" \t");
+                     string valueName = currentLine.substr(foundEqual+1);
+                     for (str_str_map::iterator itor = myMap.begin(); itor != myMap.end(); ++itor) {
+                        if (itor == myMap.findValue(valueName)) {
+                           str_str_pair pair = *itor;
+                           cout << pair.first << " = " << pair.second << endl;
+                        }
+                     }
+                  }
+                  string keyName = currentLine.substr(0, foundEqual);
+                  //keyName = keyName.substr(0, (keyName.find_last_not_of(" \t")+1));
+                  string valueName = currentLine.substr(foundEqual+1);
+                  str_str_map::iterator itor = myMap.findKey(keyName);
+                  if (itor == myMap.end()) {
+                     str_str_pair pair(keyName, valueName);
+                     itor = myMap.insert(pair);
+                     cout << itor->first << " = " << itor->second << endl;
+                  }
+                  else {
+                     itor->second = valueName;
+                     cout << itor->first << " = " << itor->second << endl;
+                  }
+
                }
 
 

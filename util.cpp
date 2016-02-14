@@ -105,6 +105,13 @@ void trim (string& line, string space, string& lineTrimmed) {
    }
    unsigned long lineEnd = line.find_last_not_of(space);
    lineTrimmed = line.substr(lineBegin, lineEnd - lineBegin + 1);
-   //return lineTrimmed;
+   auto foundEqual = lineTrimmed.find('=');
+   if (foundEqual != string::npos) {
+      string keyName = lineTrimmed.substr(0, foundEqual);
+      keyName = keyName.substr(0, (keyName.find_last_not_of(space) + 1));
+      string valueName = lineTrimmed.substr(foundEqual + 1);
+      valueName = valueName.substr(valueName.find_first_not_of(space));
+      lineTrimmed = keyName + "=" + valueName;
+   }
 }
 

@@ -19,11 +19,13 @@ class listmap {
       struct link {
          node* next{};
          node* prev{};
+          link(){};
          link (node* next, node* prev): next(next), prev(prev){}
       };
       struct node: link {
          value_type value{};
          node (node* next, node* prev, const value_type&);
+
       };
       node* anchor() { return static_cast<node*> (&anchor_); }
       link anchor_ {anchor(), anchor()};
@@ -34,11 +36,12 @@ class listmap {
       listmap& operator= (const listmap&);
       ~listmap();   // Look at the example in xlist.h: ~xlist(){ if (not empty()) pop_back();}
       iterator insert (const value_type&);
-      listmap<Key,Value,Less>::iterator find (const key_type&) /*const*/;
+      iterator findKey (const key_type&) /*const*/;
+      iterator findValue (const mapped_type&);
       iterator erase (iterator position);
       iterator begin() { return anchor()->next; }
       iterator end() { return anchor(); }
-      bool empty() const { return begin() == end(); }
+      bool empty() /*const*/ { return begin() == end(); }
 };
 
 
