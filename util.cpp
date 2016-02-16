@@ -78,17 +78,17 @@ void syscall_error (const string& object) {
 }
 
 void readFile (istream& infile, const string& filename, string lineArray[], int& lineCount) {
-   lineCount = 1;
+   //lineCount = 1;
    for (; ;) {
       string space = " \t";
       string line;
       getline(infile, line);
       if (infile.eof()) break;
-      cout << filename << ": " << lineCount << ": " << line << endl;
+      //cout << filename << ": " << lineCount << ": " << line << endl;
       string lineTrimmed;
       trim (line, space, lineTrimmed);
       //cout << lineTrimmed << endl;
-      lineArray[lineCount-1] = lineTrimmed;
+      lineArray[lineCount] = lineTrimmed;
       //cout << lineArray[lineCount-1] << endl;
       ++lineCount;
    }

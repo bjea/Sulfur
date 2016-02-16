@@ -50,10 +50,10 @@ int main (int argc, char** argv) {
    for (int i = 1; i < argc; ++i) {
       filenames[i-1] = argv[i];
    }
-   int lineCount = 0;
+
    str_str_map myMap;
    for (const auto& it : filenames) {
-
+      int lineCount = 0;
       if (it == cin_name) {
          readFile(cin, it, lineArray, lineCount);
       }
@@ -67,6 +67,7 @@ int main (int argc, char** argv) {
 
             for (int i = 0; i < lineCount; ++i) {
                string currentLine = lineArray[i];
+               cout << it << ": " << i+1 << ": " << currentLine << endl;
 
                if (currentLine[0] == '#' or currentLine.length() == 0) {
                   continue;
@@ -129,9 +130,6 @@ int main (int argc, char** argv) {
          }
       }
    }
-   for (int i = 0; i < lineCount; ++i) {
-      cout << lineArray[i] << endl;
-   }
 
 
 /*
@@ -142,14 +140,16 @@ int main (int argc, char** argv) {
       test.insert (pair);
    }
 
-   for (str_str_map::iterator itor = test.begin();
-        itor != test.end(); ++itor) {
-      cout << "During iteration: " << *itor << endl;
+   for (str_str_map::iterator itor = myMap.begin();
+        itor != myMap.end(); ++itor) {
+      //cout << "During iteration: " << *itor << endl;
+      myMap.erase (itor);
    }
 
    str_str_map::iterator itor = test.begin();
    test.erase (itor);
 */
+   //myMap.~listmap();
    cout << "EXIT_SUCCESS" << endl;
    return EXIT_SUCCESS;
 
