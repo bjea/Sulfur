@@ -121,35 +121,14 @@ int main (int argc, char** argv) {
                      itor->second = valueName;
                      cout << itor->first << " = " << itor->second << endl;
                   }
-
                }
-
-
             }
             inFile.close();
          }
       }
    }
 
-
-/*
-   str_str_map test;
-   for (char** argp = &argv[optind]; argp != &argv[argc]; ++argp) {
-      str_str_pair pair (*argp, to_string<int> (argp - argv));
-      cout << "Before insert: " << pair << endl;
-      test.insert (pair);
-   }
-
-   for (str_str_map::iterator itor = myMap.begin();
-        itor != myMap.end(); ++itor) {
-      //cout << "During iteration: " << *itor << endl;
-      myMap.erase (itor);
-   }
-
-   str_str_map::iterator itor = test.begin();
-   test.erase (itor);
-*/
-   //myMap.~listmap();
+   myMap.~listmap();
    cout << "EXIT_SUCCESS" << endl;
    return EXIT_SUCCESS;
 

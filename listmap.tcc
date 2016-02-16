@@ -188,18 +188,37 @@ listmap<Key,Value,Less>::erase (iterator position) {
    node* current = position.where;
    node* nextNode = current->next;
    node* prevNode = current->prev;
-   if (current == anchor_.next) {
-      nextNode->prev =
-   }
 
-   current->prev->next = nextNode;
-   nextNode->prev = current->prev;
-   if (current /*position.where*/ != nullptr) {
-      //delete position.where;
+   // we are erasing the last node
+   if(current == nextNode)
+   {
+      anchor_.next = anchor();
+      anchor_.prev = anchor();
       delete current;
+      return end();
+   }
+   else
+   {
+
+      prevNode->next = nextNode;
+      nextNode->prev = prevNode;
+
+      // check if we are erasing the head node
+      if (current == anchor_.next) {
+         anchor_.next = nextNode;
+      }
+      // check if we are erasing the tail node
+      if (current == anchor_.prev) {
+         anchor_.prev = prevNode;
+      }
+      if (current /*position.where*/ != end().where) {
+         //delete position.where;
+         delete current;
+         return iterator(nextNode);
+      }
    }
 
-   return iterator(nextNode);
+   return end();
 }
 
 
