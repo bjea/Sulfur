@@ -37,7 +37,6 @@ class listmap {
       ~listmap();   // Look at the example in xlist.h: ~xlist(){ if (not empty()) pop_back();}
       iterator insert (const value_type&);
       iterator findKey (const key_type&) /*const*/;
-      iterator findValue (const mapped_type&);
       iterator erase (iterator position);
       iterator begin() { return anchor()->next; }
       iterator end() { return anchor(); }

@@ -77,8 +77,7 @@ void syscall_error (const string& object) {
    complain() << object << ": " << strerror (errno) << endl;
 }
 
-void readFile (istream& infile, const string& filename, string lineArray[], int& lineCount) {
-   //lineCount = 1;
+void readFile (istream& infile, /*const string& filename,*/ string lineArray[], int& lineCount) {
    for (; ;) {
       string space = " \t";
       string line;
@@ -105,6 +104,9 @@ void trim (string& line, string space, string& lineTrimmed) {
    }
    unsigned long lineEnd = line.find_last_not_of(space);
    lineTrimmed = line.substr(lineBegin, lineEnd - lineBegin + 1);
+   if (lineTrimmed == "=") {
+      return;
+   }
    auto foundEqual = lineTrimmed.find('=');
    if (foundEqual != string::npos) {
       string keyName = lineTrimmed.substr(0, foundEqual);

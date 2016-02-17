@@ -55,7 +55,7 @@ int main (int argc, char** argv) {
    for (const auto& it : filenames) {
       int lineCount = 0;
       if (it == cin_name) {
-         readFile(cin, it, lineArray, lineCount);
+         readFile(cin, /*it,*/ lineArray, lineCount);
       }
       else {
          ifstream inFile (it);
@@ -63,7 +63,8 @@ int main (int argc, char** argv) {
             complain() << it << ": failed to open." << endl;
          }
          else {
-            readFile(inFile, it, lineArray, lineCount);
+            readFile(inFile, /*it,*/ lineArray, lineCount);
+         }
 
             for (int i = 0; i < lineCount; ++i) {
                string currentLine = lineArray[i];
@@ -86,45 +87,51 @@ int main (int argc, char** argv) {
                   }
                }
                else {
+                  // Handling case: nothing after "key=", erase the {key, value} pair.
                   if (currentLine.substr(foundEqual+1).find_first_not_of(" \t") == string::npos) {
                      string keyName = currentLine.substr(0, foundEqual);
-                     //keyName = keyName.substr(0, (keyName.find_last_not_of(" \t")+1));
                      str_str_map::iterator itor = myMap.findKey(keyName);
                      myMap.erase(itor);
                   }
-                  if (foundEqual == 0 && currentLine.length() == 1) {
+                  // Handling case: only "=" in a line, print out entire listmap.
+                  if (currentLine == "=") {
                      for (str_str_map::iterator itor = myMap.begin(); itor != myMap.end(); ++itor) {
                         str_str_pair pair = *itor;
                         cout << pair.first << " = " << pair.second << endl;
                      }
                   }
+                  // Handling case: only "=value" in a line, no key specified,
+                  // print out all the {key, value} pairs with target "value".
                   if (foundEqual == 0 && currentLine.length() > 1) {
                      //auto valueNamePos = currentLine.substr(foundEqual+1).find_first_not_of(" \t");
                      string valueName = currentLine.substr(foundEqual+1);
                      for (str_str_map::iterator itor = myMap.begin(); itor != myMap.end(); ++itor) {
-                        if (itor == myMap.findValue(valueName)) {
-                           str_str_pair pair = *itor;
+                        str_str_pair pair = *itor;
+                        if (pair.second == valueName) {
                            cout << pair.first << " = " << pair.second << endl;
                         }
                      }
                   }
-                  string keyName = currentLine.substr(0, foundEqual);
-                  //keyName = keyName.substr(0, (keyName.find_last_not_of(" \t")+1));
-                  string valueName = currentLine.substr(foundEqual+1);
-                  str_str_map::iterator itor = myMap.findKey(keyName);
-                  if (itor == myMap.end()) {
-                     str_str_pair pair(keyName, valueName);
-                     itor = myMap.insert(pair);
-                     cout << itor->first << " = " << itor->second << endl;
-                  }
-                  else {
-                     itor->second = valueName;
-                     cout << itor->first << " = " << itor->second << endl;
+                     // Handling case: "key=value", if "key" not found, add {key, value} to the
+                     // listmap; if key found, replace existing value with "value".
+                  if (foundEqual != 0 && currentLine.length() > 2) {
+                     string keyName = currentLine.substr(0, foundEqual);
+                     //keyName = keyName.substr(0, (keyName.find_last_not_of(" \t")+1));
+                     string valueName = currentLine.substr(foundEqual+1);
+                     str_str_map::iterator itor = myMap.findKey(keyName);
+                     if (itor == myMap.end()) {
+                        str_str_pair pair(keyName, valueName);
+                        itor = myMap.insert(pair);
+                        cout << itor->first << " = " << itor->second << endl;
+                     }
+                     else {
+                        itor->second = valueName;
+                        cout << itor->first << " = " << itor->second << endl;
+                     }
                   }
                }
             }
             inFile.close();
-         }
       }
    }
 
