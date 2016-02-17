@@ -108,7 +108,7 @@ item_t from_string (const string&);
 // Put the RCS Id string in the object file.
 //
 
-void readFile (istream& infile, /*const string& filename,*/ string lineArray[], int& lineCount);
+void readFile (istream& infile, string lineArray[], int& lineCount);
 void trim (string& line, string space, string& lineTrimmed);
 
 #include "util.tcc"

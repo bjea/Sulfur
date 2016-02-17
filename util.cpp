@@ -77,7 +77,7 @@ void syscall_error (const string& object) {
    complain() << object << ": " << strerror (errno) << endl;
 }
 
-void readFile (istream& infile, /*const string& filename,*/ string lineArray[], int& lineCount) {
+void readFile (istream& infile, string lineArray[], int& lineCount) {
    for (; ;) {
       string space = " \t";
       string line;
@@ -91,9 +91,6 @@ void readFile (istream& infile, /*const string& filename,*/ string lineArray[], 
       //cout << lineArray[lineCount-1] << endl;
       ++lineCount;
    }
-
-   //data.assign((istreambuf_iterator<char> (infile)), (istreambuf_iterator<char> ()));
-   //return lineArray;
 }
 
 void trim (string& line, string space, string& lineTrimmed) {
@@ -109,9 +106,15 @@ void trim (string& line, string space, string& lineTrimmed) {
    }
    auto foundEqual = lineTrimmed.find('=');
    if (foundEqual != string::npos) {
+      //if (foundEqual == 0)
       string keyName = lineTrimmed.substr(0, foundEqual);
-      keyName = keyName.substr(0, (keyName.find_last_not_of(space) + 1));
+      keyName =
+              keyName.substr(0, (keyName.find_last_not_of(space) + 1));
       string valueName = lineTrimmed.substr(foundEqual + 1);
+      if (valueName.length() == 0) {
+         lineTrimmed = keyName + "=";
+         return;
+      }
       valueName = valueName.substr(valueName.find_first_not_of(space));
       lineTrimmed = keyName + "=" + valueName;
    }

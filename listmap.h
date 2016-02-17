@@ -6,8 +6,10 @@
 #include "xless.h"
 #include "xpair.h"
 
-// We have no control over Key or Value
-template <typename Key, typename Value, class Less=xless<Key>>  // We specify default value of Less here, but not in the implementation file.
+// We have no control over Key or Value.
+// We specify default value of Less here, but not in
+// the implementation file.
+template <typename Key, typename Value, class Less=xless<Key>>
 class listmap {
    public:
       using key_type = Key;
@@ -34,9 +36,9 @@ class listmap {
       listmap(){};
       listmap (const listmap&);
       listmap& operator= (const listmap&);
-      ~listmap();   // Look at the example in xlist.h: ~xlist(){ if (not empty()) pop_back();}
+      ~listmap();
       iterator insert (const value_type&);
-      iterator findKey (const key_type&) /*const*/;
+      iterator find (const key_type&) /*const*/;
       iterator erase (iterator position);
       iterator begin() { return anchor()->next; }
       iterator end() { return anchor(); }
@@ -53,9 +55,9 @@ class listmap<Key,Value,Less>::iterator {
       //iterator (listmap)
    public:
       iterator(){}
-      //iterator (listmap<Key,Value,Less>::node* that) {where = that;}
       value_type& operator*();
-      value_type* operator->(); // Unary operator, p->f, actually is p(->f), binding to f, i.operator->()
+      // Unary operator, p->f, actually is p(->f), binding to f.
+      value_type* operator->();
       iterator& operator++(); //++itor
       iterator& operator--(); //--itor
       void erase();

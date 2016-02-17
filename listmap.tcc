@@ -35,7 +35,7 @@ listmap<Key,Value,Less>::~listmap() {
 
    while (not empty()) {
       listmap<Key,Value,Less>::iterator itor = begin();
-      cout << "Deleting node: " << *itor << endl;
+      //cout << "Deleting node: " << *itor << endl;
       erase (itor);
    }
 }
@@ -129,10 +129,10 @@ listmap<Key,Value,Less>::insert (const value_type& pair) {
 //
 template <typename Key, typename Value, class Less>
 typename listmap<Key,Value,Less>::iterator
-listmap<Key,Value,Less>::findKey (const key_type& that) /*const*/ {
+listmap<Key,Value,Less>::find (const key_type& that) /*const*/ {
    TRACE ('l', that);
    node* current = anchor();
-   node* head = anchor_.next;
+   //node* head = anchor_.next;
 
    if(not empty())
    {
