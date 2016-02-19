@@ -52,7 +52,6 @@ class listmap<Key,Value,Less>::iterator {
       friend class listmap<Key,Value>;
       listmap<Key,Value,Less>::node* where {nullptr};
       iterator (listmap<Key,Value,Less>::node* where): where(where){};
-      //iterator (listmap)
    public:
       iterator(){}
       value_type& operator*();

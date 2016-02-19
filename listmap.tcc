@@ -82,44 +82,6 @@ listmap<Key,Value,Less>::insert (const value_type& pair) {
       {
          anchor_.prev = newNode;
       }
-/*
-      do{
-         if(less(preNode->value.first, newNode->value.first))
-         {
-            preNode = preNode->next;
-         }
-         else
-         {
-            // this is where we need to insert the new element in front of the 1st element.
-            if(preNode == anchor()->next)
-            {
-               preNode = anchor();
-            }
-            // all other cases, we insert the new node after some existing node.
-            else
-            {
-               preNode = preNode ->prev;
-            }
-         }
-      }while(preNode != anchor()->next);
-
-      if(preNode == anchor())
-      {
-         newNode->prev = anchor()->next->prev;
-         newNode->next = anchor()->next;
-         anchor()->next->prev = newNode;
-         anchor()->next = newNode;
-         anchor()->prev->next = newNode;
-      }
-      else
-      {
-         newNode->prev = preNode;
-         newNode->next = preNode->next;
-         newNode->next->prev = newNode;
-         newNode->prev->next = newNode;
-      }
-*/
-
    }
    return iterator(newNode);
 }
@@ -145,29 +107,6 @@ listmap<Key,Value,Less>::find (const key_type& that) /*const*/ {
             break;
          }
       } while(current != anchor());
-
-      /*if (head != tail && head->next == tail) {
-         if (head->value.first == that) {
-            current = head;
-         }
-         if (tail->value.first == that) {
-            current = tail;
-         }
-         else {
-            return end();
-         }
-      }
-      else {
-         do {
-            current = current->next;
-            if(current->value.first == that) {
-               break;
-            }
-         } while(current->next != head);
-         if (current->value.first != that) {
-            return end();
-         }
-      }*/
    }
 
    return iterator(current);
@@ -203,34 +142,6 @@ listmap<Key,Value,Less>::erase (iterator position) {
    }
    delete current;
    return iterator(nextNode);
-/*
-   // we are erasing the last node
-   if(current == nextNode)
-   {
-      anchor_.next = anchor();
-      anchor_.prev = anchor();
-      delete current;
-      return end();
-   }
-   else
-   {
-
-      prevNode->next = nextNode;
-      nextNode->prev = prevNode;
-
-      // check if we are erasing the head node
-      if (current == anchor_.next) {
-         anchor_.next = nextNode;
-      }
-      // check if we are erasing the tail node
-      if (current == anchor_.prev) {
-         anchor_.prev = prevNode;
-      }
-
-      // delete and return interator to next node
-      delete current;
-      return iterator(nextNode);
-   }*/
 }
 
 
@@ -267,14 +178,7 @@ template <typename Key, typename Value, class Less>
 typename listmap<Key,Value,Less>::iterator&
 listmap<Key,Value,Less>::iterator::operator++() {
    TRACE ('l', where);
-   /*listmap<Key,Value,Less> thisMap;
-   if (where == thisMap.begin().where) {
-      return
-   }
-   else {*/
-      where = where->next;
-      //*this = thisMap.end();
-  // }
+   where = where->next;
    return *this;
 }
 
@@ -285,16 +189,38 @@ template <typename Key, typename Value, class Less>
 typename listmap<Key,Value,Less>::iterator&
 listmap<Key,Value,Less>::iterator::operator--() {
    TRACE ('l', where);
-   /*listmap<Key,Value,Less> thisMap;
-   if (where == thisMap.anchor()) {
-      where = where->prev;
-   }
-   else {
-      *this = thisMap.end();
-   }*/
    where = where->prev;
    return *this;
 }
+
+
+//
+// void listmap<Key,Value,Less>::iterator::erase()
+//
+template <typename Key, typename Value, class Less>
+void listmap<Key,Value,Less>::iterator::erase() {
+   listmap<Key,Value,Less> thisMap;
+   if (where == thisMap.end().where)
+   {
+      return;
+   }
+
+   listmap<Key,Value,Less>::node* current = where;
+   node* nextNode = where->next;
+   node* prevNode = where->prev;
+
+   where->prev->next = where->next;
+   where->next->prev = where->prev;
+   if (where->prev == thisMap.end().where)
+   {
+      thisMap.end().where->next = where->next;
+   }
+   if (where->next == thisMap.end().where)
+   {
+      thisMap.end().where->prev = where->prev;
+   }
+   delete where;
+};
 
 
 //

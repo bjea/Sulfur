@@ -152,7 +152,7 @@ int main (int argc, char** argv) {
    }
 
    myMap.~listmap();
-   cout << "EXIT_SUCCESS" << endl;
+   //cout << "EXIT_SUCCESS" << endl;
    return EXIT_SUCCESS;
 }
 
